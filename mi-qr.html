@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1.0,viewport-fit=cover" name="viewport"/>
+<title>Mi código QR — ET35</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="styles.css" rel="stylesheet"/></head>
+<body>
+
+<div id="login-screen">
+<div class="login-wrap">
+<div class="login-banner">
+<div class="login-banner-shield">
+<img src="escudo-et35.jpg" alt="Escudo de la Escuela Técnica N°35"/>
+</div>
+<h1>Escuela Técnica N°35<br/>Eduardo Latzina</h1>
+<div class="login-banner-divider"></div>
+<p>Sistema de Monitoreo de<br/>Asistencia mediante Código QR</p>
+<div class="login-banner-info">D.E.18 · Buenos Aires · 1951</div>
+</div>
+<div class="login-form-side">
+<h2>Iniciar sesión</h2>
+<p>Accedé con tus credenciales institucionales</p>
+<div class="login-role-tabs">
+<div class="role-tab active" id="tab-prec" onclick="setTab('prec')">👩‍🏫 Preceptor/a</div>
+<div class="role-tab" id="tab-jefa" onclick="setTab('jefa')">⭐ Jefa de Prec.</div>
+<div class="role-tab" id="tab-alumno" onclick="setTab('alumno')">🎓 Alumno/a</div></div>
+<div class="login-field">
+<label>Usuario</label>
+<input id="login-user" placeholder="usuario.preceptor" type="text" value="preceptor01"/>
+</div>
+<div class="login-field">
+<label>Contraseña</label>
+<input id="login-pass" placeholder="••••••••" type="password" value="123456"/>
+</div>
+<button class="login-btn" onclick="doLogin()">Ingresar al sistema</button>
+<p class="login-hint">Preceptores: <strong>preceptor01 a preceptor29 / 123456</strong><br/>Jefa: <strong>jefa / admin123</strong><br/>Alumnos: <strong>alumno1 en adelante / alumno123</strong></p>
+</div>
+</div>
+</div>
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+<div id="app">
+
+<aside class="sidebar" id="sidebar">
+<div class="sidebar-header">
+<div class="sidebar-shield">
+<img src="escudo-et35.jpg" alt="Escudo de la Escuela Técnica N°35"/>
+</div>
+<div class="sidebar-title">
+<strong>ET N°35 D.E.18</strong>
+<span>Ing. Eduardo Latzina</span>
+</div>
+</div>
+<nav class="sidebar-nav" id="sidebar-nav"></nav>
+<div class="sidebar-footer">
+<div class="user-row">
+<div class="user-avatar" id="sidebar-avatar">MP</div>
+<div class="user-info">
+<strong id="sidebar-username">—</strong>
+<span id="sidebar-role">—</span>
+</div>
+<button class="logout-btn" onclick="doLogout()" title="Cerrar sesión">⎋</button>
+</div>
+</div>
+</aside>
+<header class="topbar">
+<button class="topbar-burger" onclick="toggleSidebar()">☰</button>
+<div>
+<div class="topbar-title" id="topbar-title">Panel de Control</div>
+<div class="topbar-sub">ET N°35 Eduardo Latzina</div>
+</div>
+<div class="topbar-right">
+<div class="live-badge"><div class="live-dot"></div><span>Sistema activo</span></div>
+<div class="topbar-date" id="live-date"></div>
+<div id="live-clock"></div>
+</div>
+</header>
+<main class="main" id="main-content"><div class="page active" id="page-mi-qr"><div class="page-header"><h2>Mi código QR</h2><p id="portal-nombre"></p><p class="info-note">Mostrá tu QR para registrar tu ingreso o salida. Los cambios se comparten entre dispositivos únicamente si la base de datos está conectada.</p></div><div id="portal-qr-content"></div></div></main>
+</div>
+
+
+<div class="modal-overlay" id="modal-alumno">
+<div class="modal">
+<div class="modal-head"><span>👤</span><h3>Nuevo alumno</h3><button class="modal-close" onclick="closeModal('modal-alumno')">✕</button></div>
+<div class="modal-body">
+<div class="form-grid">
+<div class="form-group"><label>Nombre</label><input id="al-nombre" placeholder="Juan" type="text"/></div>
+<div class="form-group"><label>Apellido</label><input id="al-apellido" placeholder="García" type="text"/></div>
+<div class="form-group"><label>DNI</label><input id="al-dni" placeholder="12345678" type="number"/></div>
+<div class="form-group"><label>Curso</label><select id="al-curso"></select></div>
+<div class="form-group full"><label>Email del alumno</label><input id="al-email" placeholder="alumno@et35.edu.ar" type="email"/></div>
+<div class="form-group full"><label>Email del responsable</label><input id="al-emailresp" placeholder="padre@gmail.com" type="email"/></div>
+</div>
+</div>
+<div class="modal-foot">
+<button class="btn btn-ghost" onclick="closeModal('modal-alumno')">Cancelar</button>
+<button class="btn btn-primary" onclick="guardarAlumno()">Guardar alumno</button>
+</div>
+</div>
+</div>
+
+<div class="modal-overlay" id="modal-prec">
+<div class="modal">
+<div class="modal-head"><span>👩‍🏫</span><h3>Nuevo preceptor</h3><button class="modal-close" onclick="closeModal('modal-prec')">✕</button></div>
+<div class="modal-body">
+<div class="form-grid">
+<div class="form-group"><label>Nombre</label><input id="prec-nombre" placeholder="Ana" type="text"/></div>
+<div class="form-group"><label>Apellido</label><input id="prec-apellido" placeholder="López" type="text"/></div>
+<div class="form-group"><label>Usuario</label><input id="prec-usuario" placeholder="a.lopez" type="text"/></div>
+<div class="form-group"><label>Contraseña inicial</label><input id="prec-pass" placeholder="••••••••" type="password"/></div>
+<div class="form-group full"><label>Email</label><input id="prec-mail" placeholder="a.lopez@et35.edu.ar" type="email"/></div>
+<div class="form-group full"><label>Curso asignado</label><select id="prec-curso-asign"></select></div>
+</div>
+</div>
+<div class="modal-foot">
+<button class="btn btn-ghost" onclick="closeModal('modal-prec')">Cancelar</button>
+<button class="btn btn-primary" onclick="guardarPreceptor()">Guardar preceptor</button>
+</div>
+</div>
+</div>
+
+<div class="modal-overlay" id="modal-corregir">
+<div class="modal">
+<div class="modal-head"><span>✏️</span><h3>Corregir registro</h3><button class="modal-close" onclick="closeModal('modal-corregir')">✕</button></div>
+<div class="modal-body">
+<p id="corr-desc" style="font-size:.83rem;color:var(--gray-muted);margin-bottom:1rem"></p>
+<div class="form-grid">
+<div class="form-group"><label>Hora entrada</label><input id="corr-entrada" type="time"/></div>
+<div class="form-group"><label>Hora salida</label><input id="corr-salida" type="time"/></div>
+<div class="form-group"><label>Estado</label><select id="corr-estado"><option value="Presente">Presente</option><option value="Tarde">Tarde</option><option value="Ausente">Ausente</option><option value="Retiro">Retiro anticipado</option><option value="Justificado">Justificado</option></select></div>
+<div class="form-group"><label>Tipo</label><select id="corr-tipo"><option value="QR">QR automático</option><option value="Manual">Manual preceptor</option></select></div>
+<div class="form-group full"><label>Observación</label><textarea id="corr-obs" rows="2"></textarea></div>
+</div>
+</div>
+<div class="modal-foot">
+<button class="btn btn-ghost" onclick="closeModal('modal-corregir')">Cancelar</button>
+<button class="btn btn-primary" onclick="guardarCorreccion()">Guardar</button>
+</div>
+</div>
+</div>
+
+<div class="modal-overlay" id="modal-revisar-just">
+<div class="modal">
+<div class="modal-head"><span>📄</span><h3>Revisar justificación</h3><button class="modal-close" onclick="closeModal('modal-revisar-just')">✕</button></div>
+<div class="modal-body">
+<div id="just-review-detail" style="background:var(--gray-bg);border-radius:var(--radius);padding:1rem;margin-bottom:1rem;font-size:.85rem"></div>
+<div class="form-group">
+<label>Cambiar estado</label>
+<select id="just-new-estado">
+<option value="En revisión">En revisión</option>
+<option value="Justificado">Justificado (Aprobado)</option>
+<option value="Denegado">Denegado</option>
+</select>
+</div>
+<div class="form-group" style="margin-top:.8rem">
+<label>Observación de la jefa</label>
+<textarea id="just-review-obs" placeholder="Motivo de la decisión..." rows="3"></textarea>
+</div>
+</div>
+<div class="modal-foot">
+<button class="btn btn-ghost" onclick="closeModal('modal-revisar-just')">Cancelar</button>
+<button class="btn btn-primary" onclick="guardarRevisionJust()">Guardar decisión</button>
+</div>
+</div>
+</div>
+
+<div class="modal-overlay" id="modal-mail">
+<div class="modal">
+<div class="modal-head"><span>📧</span><h3>Notificar responsable</h3><button class="modal-close" onclick="closeModal('modal-mail')">✕</button></div>
+<div class="modal-body" id="modal-mail-body"></div>
+<div class="modal-foot">
+<button class="btn btn-ghost" onclick="closeModal('modal-mail')">Cancelar</button>
+<button class="btn btn-primary" onclick="confirmarEnvioMail()">Abrir borrador de email</button>
+</div>
+</div>
+</div>
+<div id="toast-container"></div>
+<script src="horarios.js"></script><script src="cloud-sync.js"></script><script src="cloud-loader.js"></script></body>
+</html>
