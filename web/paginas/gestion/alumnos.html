@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<base href="../../"/>
+<script>document.querySelector("base").href = new URL("../../", location.href).href;</script>
+<script src="js/comun/rutas.js"></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1.0,viewport-fit=cover" name="viewport"/>
+<title>Alumnos — Sistema de Asistencia ET35</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="css/styles.css" rel="stylesheet"/></head>
+<body>
+
+<div id="login-screen">
+<div class="login-wrap">
+<div class="login-banner">
+<div class="login-banner-shield">
+<img src="imagenes/escudo-et35.jpg" alt="Escudo de la Escuela Técnica N°35"/>
+</div>
+<h1>Escuela Técnica N°35<br/>Eduardo Latzina</h1>
+<div class="login-banner-divider"></div>
+<p>Sistema de Monitoreo de<br/>Asistencia mediante Código QR</p>
+<div class="login-banner-info">D.E.18 · Buenos Aires · 1951</div>
+</div>
+<div class="login-form-side">
+<h2>Iniciar sesión</h2>
+<p>Accedé con tus credenciales institucionales</p>
+<div class="login-role-tabs">
+<div class="role-tab active" id="tab-prec" onclick="setTab('prec')">👩‍🏫 Preceptor/a</div>
+<div class="role-tab" id="tab-jefa" onclick="setTab('jefa')">⭐ Jefa de Prec.</div>
+<div class="role-tab" id="tab-alumno" onclick="setTab('alumno')">🎓 Alumno/a</div></div>
+<div class="login-field">
+<label>Usuario</label>
+<input id="login-user" placeholder="usuario.preceptor" type="text" value="preceptor01"/>
+</div>
+<div class="login-field">
+<label>Contraseña</label>
+<input id="login-pass" placeholder="••••••••" type="password" value="123456"/>
+</div>
+<button class="login-btn" onclick="doLogin()">Ingresar al sistema</button>
+<p class="login-hint">Preceptores: <strong>preceptor01 a preceptor29 / 123456</strong><br/>Jefa: <strong>jefa / admin123</strong><br/>Alumnos: <strong>alumno1 en adelante / alumno123</strong></p>
+</div>
+</div>
+</div>
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+<div id="app">
+
+<aside class="sidebar" id="sidebar">
+<div class="sidebar-header">
+<div class="sidebar-shield">
+<img src="imagenes/escudo-et35.jpg" alt="Escudo de la Escuela Técnica N°35"/>
+</div>
+<div class="sidebar-title">
+<strong>ET N°35 D.E.18</strong>
+<span>Ing. Eduardo Latzina</span>
+</div>
+</div>
+<nav class="sidebar-nav" id="sidebar-nav"></nav>
+<div class="sidebar-footer">
+<div class="user-row">
+<div class="user-avatar" id="sidebar-avatar">MP</div>
+<div class="user-info">
+<strong id="sidebar-username">—</strong>
+<span id="sidebar-role">—</span>
+</div>
+<button class="logout-btn" onclick="doLogout()" title="Cerrar sesión">⎋</button>
+</div>
+</div>
+</aside>
+<header class="topbar">
+<button class="topbar-burger" onclick="toggleSidebar()">☰</button>
+<div>
+<div class="topbar-title" id="topbar-title">Panel de Control</div>
+<div class="topbar-sub">ET N°35 Eduardo Latzina</div>
+</div>
+<div class="topbar-right">
+<div class="live-badge"><div class="live-dot"></div><span>Sistema activo</span></div>
+<div class="topbar-date" id="live-date"></div>
+<div id="live-clock"></div>
+</div>
+</header>
+<main class="main" id="main-content">
+
+
+
+
+
+
+
+
+
+<div class="page active" id="page-alumnos">
+<div class="page-header"><h2>Alumnos</h2><p>Padrón completo. <span id="alumnos-count">—</span> alumnos registrados.</p><p class="info-note">📨 Las 5 faltas se controlan por bimestre. Las tardanzas cuentan 0,25 por sesión si hay contraturno o Educación Física, y 0,5 en jornada única; las faltas anteriores siguen en el perfil, pero no cuentan para el límite nuevo. Regla de prueba a confirmar con la escuela. Los correos no se envían automáticamente.</p></div>
+<p class="helper-text" id="alumnos-bimestre-actual" style="margin:.5rem 0 1rem"></p>
+<div class="card">
+<div class="card-head">
+<span>👥</span><h3>Padrón de alumnos</h3>
+<div style="margin-left:auto;display:flex;gap:.5rem;flex-wrap:wrap">
+<label class="inline-filter et35-filtro-anio">Año <select id="alumnos-anio" class="filter-control" onchange="et35CambiarAnio('alumnos-anio','filter-curso-alumnos','renderAlumnos')"></select></label><select id="filter-curso-alumnos" onchange="renderAlumnos()" style="padding:.4rem .7rem;border:1.5px solid var(--gray-border);border-radius:var(--radius);font-size:.78rem">
+<option value="">Todos los cursos</option>
+</select>
+<button class="btn btn-primary btn-sm" id="btn-nuevo-alumno" onclick="openModalAlumno()" style="display:none">+ Nuevo alumno</button>
+</div>
+</div>
+<div class="card-body" style="padding:0">
+<div class="search-row" style="padding:1rem 1.2rem .5rem">
+<div class="search-wrap"><span class="search-icon">🔍</span><input id="search-alumnos" oninput="renderAlumnos()" placeholder="Buscar por apellido, DNI o ID..." type="text"/></div><label class="inline-filter">Ordenar por <select id="orden-alumnos" class="filter-control" onchange="renderAlumnos()"><option value="auto">Automático (apellido si elegís curso)</option><option value="faltas">Faltas (mayor a menor)</option><option value="id">ID (menor a mayor)</option><option value="apellido">Apellido (A–Z)</option></select></label>
+</div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>ID</th><th>Apellido y nombre</th><th>DNI</th><th>Curso</th><th>Email alumno</th><th>Faltas (bimestre actual)</th><th>Estado</th><th>Acciones</th></tr></thead>
+<tbody id="alumnos-tbody"></tbody>
+</table>
+</div>
+</div>
+<div class="card-foot" id="alumnos-foot"></div>
+</div>
+</div><div class="modal-overlay" id="modal-perfil-alumno"><div class="modal modal-wide"><div class="modal-head"><span>👤</span><h3>Ficha individual del alumno</h3><button class="modal-close" onclick="closeModal('modal-perfil-alumno')">✕</button></div><div class="modal-body" id="perfil-alumno-contenido"></div><div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal('modal-perfil-alumno')">Cerrar</button></div></div></div>
+</main>
+</div>
+
+
+<div class="modal-overlay" id="modal-ausencias-alumno">
+<div class="modal modal-ausencias">
+<div class="modal-head"><span>📅</span><h3>Fechas de inasistencia</h3><button aria-label="Cerrar" class="modal-close" onclick="closeModal('modal-ausencias-alumno')">✕</button></div>
+<div class="modal-body">
+<p class="alumno-ausencias-nombre" id="ausencias-alumno-nombre"></p>
+<p class="alumno-ausencias-resumen" id="ausencias-alumno-resumen"></p>
+<div class="form-group" style="max-width:300px;margin-bottom:1rem"><label for="ausencias-alumno-filtro">Mostrar</label>
+<select id="ausencias-alumno-filtro" onchange="renderHistorialAusencias()">
+<option value="todas">Ausencias y tardanzas</option>
+<option value="ausentes">Sin justificar</option>
+<option value="justificadas">Justificadas</option><option value="tardes">Llegadas tarde (0,5)</option>
+</select>
+</div>
+<div class="form-group" style="max-width:360px;margin-bottom:1rem"><label for="ausencias-alumno-bimestre">Bimestre</label><select id="ausencias-alumno-bimestre" onchange="renderHistorialAusencias()"><option value="">Todos los bimestres</option></select></div><div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Bimestre</th><th>Estado</th><th>Faltas</th><th>Justificación</th></tr></thead><tbody id="ausencias-alumno-tbody"></tbody></table></div>
+<p class="info-note" style="margin-top:1rem">Historial de prueba. Cada tardanza vale 0,25 falta los días con contraturno o Educación Física, y 0,5 en días de jornada única. El límite de 5 se calcula en el bimestre vigente. Los totales pueden incluir ajustes manuales; las fechas corresponden a registros individuales.</p>
+</div>
+<div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal('modal-ausencias-alumno')">Cerrar</button></div>
+</div>
+</div>
+<div class="modal-overlay" id="modal-matricula-alumno">
+ <div class="modal">
+  <div class="modal-head"><span>🗂️</span><h3>Movimiento de matrícula</h3><button class="modal-close" onclick="closeModal('modal-matricula-alumno')">✕</button></div>
+  <div class="modal-body">
+   <p id="matricula-alumno-nombre" class="helper-text"></p>
+   <div class="form-grid">
+    <div class="form-group"><label>Movimiento</label><select id="matricula-alumno-tipo"><option value="baja">Registrar baja</option><option value="reingreso">Registrar reincorporación</option></select></div>
+    <div class="form-group"><label>Fecha efectiva</label><input type="date" id="matricula-alumno-fecha"/></div>
+    <div class="form-group full"><label>Motivo / observación (opcional)</label><input type="text" maxlength="180" id="matricula-alumno-nota" placeholder="Ej.: Cambio de establecimiento"/></div>
+   </div>
+   <p class="helper-text">Una baja reduce los inscriptos desde su fecha efectiva. Alcanzar el límite de faltas no genera una baja automática. Para corregir un movimiento, se puede deshacer el último.</p>
+   <div id="matricula-alumno-historial"></div>
+  </div>
+  <div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal('modal-matricula-alumno')">Cancelar</button><button class="btn btn-primary" onclick="guardarMovimientoMatricula()">Guardar movimiento</button></div>
+ </div>
+</div>
+
+<div class="modal-overlay" id="modal-alumno">
+<div class="modal">
+<div class="modal-head"><span>👤</span><h3>Nuevo alumno</h3><button class="modal-close" onclick="closeModal('modal-alumno')">✕</button></div>
+<div class="modal-body">
+<div class="form-grid">
+<div class="form-group"><label>Nombre</label><input id="al-nombre" placeholder="Juan" type="text"/></div>
+<div class="form-group"><label>Apellido</label><input id="al-apellido" placeholder="García" type="text"/></div>
+<div class="form-group"><label>DNI</label><input id="al-dni" placeholder="12345678" type="number"/></div>
+<div class="form-group"><label>Curso</label><select id="al-curso"></select></div>
+<div class="form-group full"><label>Email del alumno</label><input id="al-email" placeholder="alumno@et35.edu.ar" type="email"/></div>
+<div class="form-group full"><label>Email del responsable</label><input id="al-emailresp" placeholder="padre@gmail.com" type="email"/></div>
+</div>
+</div>
+<div class="modal-foot">
+<button class="btn btn-ghost" onclick="closeModal('modal-alumno')">Cancelar</button>
+<button class="btn btn-primary" onclick="guardarAlumno()">Guardar alumno</button>
+</div>
+</div>
+</div>
+
+<div class="modal-overlay" id="modal-prec">
+<div class="modal">
+<div class="modal-head"><span>👩‍🏫</span><h3>Nuevo preceptor</h3><button class="modal-close" onclick="closeModal('modal-prec')">✕</button></div>
+<div class="modal-body">
+<div class="form-grid">
+<div class="form-group"><label>Nombre</label><input id="prec-nombre" placeholder="Ana" type="text"/></div>
+<div class="form-group"><label>Apellido</label><input id="prec-apellido" placeholder="López" type="text"/></div>
+<div class="form-group"><label>Usuario</label><input id="prec-usuario" placeholder="a.lopez" type="text"/></div>
+<div class="form-group"><label>Contraseña inicial</label><input id="prec-pass" placeholder="••••••••" type="password"/></div>
+<div class="form-group full"><label>Email</label><input id="prec-mail" placeholder="a.lopez@et35.edu.ar" type="email"/></div>
+<div class="form-group full"><label>Curso asignado</label><select id="prec-curso-asign"></select></div>
+</div>
+</div>
+<div class="modal-foot">
+<button class="btn btn-ghost" onclick="closeModal('modal-prec')">Cancelar</button>
+<button class="btn btn-primary" onclick="guardarPreceptor()">Guardar preceptor</button>
+</div>
+</div>
+</div>
+
+<div class="modal-overlay" id="modal-corregir">
+<div class="modal">
+<div class="modal-head"><span>✏️</span><h3>Corregir registro</h3><button class="modal-close" onclick="closeModal('modal-corregir')">✕</button></div>
+<div class="modal-body">
+<p id="corr-desc" style="font-size:.83rem;color:var(--gray-muted);margin-bottom:1rem"></p>
+<div class="form-grid">
+<div class="form-group"><label>Hora entrada</label><input id="corr-entrada" type="time"/></div>
+<div class="form-group"><label>Hora salida</label><input id="corr-salida" type="time"/></div>
+<div class="form-group"><label>Estado</label><select id="corr-estado"><option value="Presente">Presente</option><option value="Tarde">Tarde</option><option value="Ausente">Ausente</option><option value="Retiro">Retiro anticipado</option><option value="Justificado">Justificado</option></select></div>
+<div class="form-group"><label>Tipo</label><select id="corr-tipo"><option value="QR">QR automático</option><option value="Manual">Manual preceptor</option></select></div>
+<div class="form-group full"><label>Observación</label><textarea id="corr-obs" rows="2"></textarea></div>
+</div>
+</div>
+<div class="modal-foot">
+<button class="btn btn-ghost" onclick="closeModal('modal-corregir')">Cancelar</button>
+<button class="btn btn-primary" onclick="guardarCorreccion()">Guardar</button>
+</div>
+</div>
+</div>
+
+<div class="modal-overlay" id="modal-revisar-just">
+<div class="modal">
+<div class="modal-head"><span>📄</span><h3>Revisar justificación</h3><button class="modal-close" onclick="closeModal('modal-revisar-just')">✕</button></div>
+<div class="modal-body">
+<div id="just-review-detail" style="background:var(--gray-bg);border-radius:var(--radius);padding:1rem;margin-bottom:1rem;font-size:.85rem"></div>
+<div class="form-group">
+<label>Cambiar estado</label>
+<select id="just-new-estado">
+<option value="En revisión">En revisión</option>
+<option value="Justificado">Justificado (Aprobado)</option>
+<option value="Denegado">Denegado</option>
+</select>
+</div>
+<div class="form-group" style="margin-top:.8rem">
+<label>Observación de la jefa</label>
+<textarea id="just-review-obs" placeholder="Motivo de la decisión..." rows="3"></textarea>
+</div>
+</div>
+<div class="modal-foot">
+<button class="btn btn-ghost" onclick="closeModal('modal-revisar-just')">Cancelar</button>
+<button class="btn btn-primary" onclick="guardarRevisionJust()">Guardar decisión</button>
+</div>
+</div>
+</div>
+
+<div class="modal-overlay" id="modal-mail">
+<div class="modal">
+<div class="modal-head"><span>📧</span><h3>Notificar responsable</h3><button class="modal-close" onclick="closeModal('modal-mail')">✕</button></div>
+<div class="modal-body" id="modal-mail-body"></div>
+<div class="modal-foot">
+<button class="btn btn-ghost" onclick="closeModal('modal-mail')">Cancelar</button>
+<button class="btn btn-primary" onclick="confirmarEnvioMail()">Abrir borrador de email</button>
+</div>
+</div>
+</div>
+<div id="toast-container"></div>
+<script src="js/horarios/horarios.js"></script><script src="js/conexion/cloud-sync.js"></script><script src="js/conexion/cloud-loader.js"></script></body>
+</html>

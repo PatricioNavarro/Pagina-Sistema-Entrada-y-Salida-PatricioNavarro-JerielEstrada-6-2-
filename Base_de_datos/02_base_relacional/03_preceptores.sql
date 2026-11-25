@@ -1,0 +1,33 @@
+BEGIN;
+INSERT INTO public.preceptores (id, nombre, apellido, email) VALUES
+(1, 'María', 'Pérez', 'preceptor01@example.com'),
+(2, 'Carlos', 'Rueda', 'preceptor02@example.com'),
+(3, 'Ana', 'Villalba', 'preceptor03@example.com'),
+(4, 'Jorge', 'Castillo', 'preceptor04@example.com'),
+(5, 'Lucía', 'Sosa', 'preceptor05@example.com'),
+(6, 'Diego', 'Ferreyra', 'preceptor06@example.com'),
+(7, 'Florencia', 'Romero', 'preceptor07@example.com'),
+(8, 'Martín', 'Aguirre', 'preceptor08@example.com'),
+(9, 'Paula', 'Medina', 'preceptor09@example.com'),
+(10, 'Gastón', 'Luna', 'preceptor10@example.com'),
+(11, 'Silvina', 'Ramos', 'preceptor11@example.com'),
+(12, 'Sergio', 'Varela', 'preceptor12@example.com'),
+(13, 'Carolina', 'Molina', 'preceptor13@example.com'),
+(14, 'Federico', 'Silva', 'preceptor14@example.com'),
+(15, 'Mónica', 'Acosta', 'preceptor15@example.com'),
+(16, 'Daniel', 'Gómez', 'preceptor16@example.com'),
+(17, 'Rocío', 'Fernández', 'preceptor17@example.com'),
+(18, 'Esteban', 'Cáceres', 'preceptor18@example.com'),
+(19, 'Natalia', 'Torres', 'preceptor19@example.com'),
+(20, 'Lucas', 'Ibarra', 'preceptor20@example.com'),
+(21, 'Verónica', 'Benítez', 'preceptor21@example.com'),
+(22, 'Marcelo', 'Ortiz', 'preceptor22@example.com'),
+(23, 'Celina', 'Márquez', 'preceptor23@example.com'),
+(24, 'Fabián', 'Duarte', 'preceptor24@example.com'),
+(25, 'Lorena', 'Gutiérrez', 'preceptor25@example.com'),
+(26, 'Pablo', 'Quiroga', 'preceptor26@example.com'),
+(27, 'Patricia', 'Méndez', 'preceptor27@example.com'),
+(28, 'Hernán', 'Godoy', 'preceptor28@example.com'),
+(29, 'Silvia', 'Ferreyra', 'preceptor29@example.com')
+ON CONFLICT DO NOTHING;
+COMMIT;

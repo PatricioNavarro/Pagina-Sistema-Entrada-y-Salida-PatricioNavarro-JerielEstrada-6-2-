@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<base href="./"/>
+<script>document.querySelector("base").href = new URL("./", location.href).href;</script>
+<script src="js/comun/rutas.js"></script>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Conexión a la base de datos · ET35</title>
+<style>
+:root{font-family:Inter,system-ui,'Segoe UI',sans-serif;color:#202535;background:#f3f5fa}
+*{box-sizing:border-box}body{margin:0;padding:24px;min-height:100vh;display:flex;align-items:center;justify-content:center}
+main{max-width:690px;width:100%;background:white;border-radius:18px;padding:clamp(18px,4vw,38px);box-shadow:0 18px 50px #2222}
+h1{font-size:1.65rem;margin:0 0 10px;color:#ab242a}p{line-height:1.55;color:#535b68}
+label{display:block;margin:14px 0 5px;font-weight:700;font-size:.89rem}
+input{width:100%;padding:12px;border:1px solid #c7ccd7;border-radius:8px;font:inherit}
+button,.link{display:inline-block;background:#b22a2e;color:white;padding:12px 20px;font:700 .95rem system-ui;border:0;border-radius:9px;cursor:pointer;text-decoration:none;margin-top:18px}
+.secondary{background:#e7e9ef;color:#30394b;margin-left:7px}a{color:#ac252a}
+#message{margin-top:15px;min-height:22px;font-weight:600}#message.error{color:#bb2628}#message.ok{color:#167d42}
+.help{background:#f5f6f9;padding:14px 18px;border-radius:12px;margin-top:24px}.help ol{line-height:1.65;padding-left:22px}
+small{color:#626c7b}code{background:#eee;padding:2px 5px;border-radius:4px}
+</style>
+</head>
+<body>
+<main>
+<h1>☁️ Base de datos compartida — ET35</h1>
+<p>Conectá la página escolar y la terminal QR a la <strong>misma base de datos</strong>, incluso si las abrís desde equipos diferentes. No hace falta Node.js.</p>
+<form id="connection-form">
+<label for="url">URL del proyecto de Supabase</label>
+<input id="url" type="url" placeholder="https://xxxxx.supabase.co" autocomplete="url" required>
+<label for="key">Clave pública (publishable / anon)</label>
+<input id="key" type="text" placeholder="sb_publishable_..." spellcheck="false" autocomplete="off" required>
+<label for="email">Correo de la cuenta compartida de prueba</label>
+<input id="email" type="email" placeholder="ejemplo@correo.com" autocomplete="username" required>
+<label for="password">Contraseña de esa cuenta</label>
+<input id="password" type="password" placeholder="Contraseña de Supabase Auth" autocomplete="current-password" required>
+<button type="submit" id="connect">Conectar y sincronizar</button>
+<a class="link secondary" href="index.html">Volver al sistema</a>
+</form>
+<div id="message" role="status"></div>
+<p><small>Esta página guarda la URL, la clave pública y una sesión de acceso en este navegador; no guarda la contraseña. La clave <strong>service_role / secret</strong> NUNCA debe colocarse acá.</small></p>
+<div class="help">
+<strong>Preparación (una sola vez)</strong>
+<ol>
+<li>Creá un proyecto en <a target="_blank" rel="noopener" href="https://supabase.com/dashboard">Supabase</a>.</li>
+<li>En <strong>SQL Editor</strong>, ejecutá el contenido del archivo <code>INSTALAR_BASE_DATOS.sql</code> del ZIP.</li>
+<li>En <strong>Authentication → Users</strong>, creá una cuenta de prueba con correo y contraseña. Si la confirmación de email está habilitada, confirmala.</li>
+<li>Copiá la <strong>Project URL</strong> y la clave pública desde las opciones de API y completá los campos de arriba.</li>
+<li>En la segunda computadora o celular, abrí la misma web y conectá <strong>el mismo proyecto y la misma cuenta</strong>. Los cambios aparecerán automáticamente.</li>
+</ol>
+<strong>Uso permitido:</strong> solamente datos ficticios. Esta integración conserva la autenticación escolar de prueba; no es una solución segura para datos personales reales.</div>
+</main>
+<script src="js/conexion/cloud-sync.js"></script>
+<script>
+const el=id=>document.getElementById(id);
+const config=ET35Cloud.getConfig();if(config){el('url').value=config.url;el('key').value=config.key}
+function message(s,error){el('message').textContent=s;el('message').className=error?'error':'ok'}
+el('connection-form').addEventListener('submit',async e=>{
+ e.preventDefault();el('connect').disabled=true;message('Comprobando credenciales y base de datos…',false);
+ try{
+  ET35Cloud.configure(el('url').value,el('key').value);
+  await ET35Cloud.login(el('email').value.trim(),el('password').value);
+  message('¡Conexión correcta! Abriendo el sistema…',false);
+  const params=new URLSearchParams(location.search);const dest=params.get('volver')||'index.html';
+  setTimeout(()=>{location.href=dest==='terminal-qr/'?new URL(dest,document.baseURI).href:/^[\w-]+\.html$/i.test(dest)?et35RutaPagina(dest.slice(0,-5)):et35RutaPagina('index')},800);
+ }catch(err){message('No se pudo conectar: '+err.message,true)}finally{el('connect').disabled=false}
+});
+</script>
+</body></html>

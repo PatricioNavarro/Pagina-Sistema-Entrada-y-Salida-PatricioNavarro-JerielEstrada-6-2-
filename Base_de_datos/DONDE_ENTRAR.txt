@@ -1,0 +1,11 @@
+BASE DE DATOS - ET35
+
+01_conexion_web: INSTALAR_BASE_DATOS.sql crea et35_workspace y sus políticas. Es el SQL que utiliza la sincronización de la web actual.
+
+02_base_relacional: tablas y datos iniciales ficticios, separados por tema. Ejecutar los archivos 01 a 10 en ese orden en SQL Editor de Supabase. Las tablas relacionales no están conectadas al frontend actual. El archivo 07 debe ejecutarse completo (usa una tabla temporal dentro de una transacción).
+
+03_instalacion_completa: conserva el SQL original completo, con las tablas, los datos iniciales, las políticas de seguridad, la conexión web y la consulta de verificación. Es una alternativa a ejecutar por separado 01_conexion_web y 02_base_relacional; no hace falta ejecutar las dos modalidades.
+
+Para entregar el SQL en un solo archivo, usar 03_instalacion_completa/ET35_BASE_DE_DATOS_COMPLETA.sql. Para consultar una parte específica, usar los archivos de 02_base_relacional.
+
+La página no fue modificada. Los archivos siguen siendo para PostgreSQL/Supabase.
