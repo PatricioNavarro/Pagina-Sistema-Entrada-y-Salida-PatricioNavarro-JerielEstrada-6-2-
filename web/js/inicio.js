@@ -32,23 +32,23 @@ const PRECEPTORES_INICIALES = [
 ];
 let PRECEPTORES = PRECEPTORES_INICIALES.map(p => ({ ...p, cursos: [...p.cursos] }));
 const MAX_CURSOS_POR_PRECEPTOR = 4;
-const JEFA = { nombre: 'Laura', apellido: 'Martínez', usuario: 'jefa', pass: 'admin123', mail: 'l.martinez@et35.edu.ar', rol: 'jefa' };
+const JEFA = { nombre: 'Laura', apellido: 'Martínez', usuario: 'jefa', pass: 'admin123', mail: 'l.martinez@example.com', rol: 'jefa' };
 let ALUMNOS = [
-    { id: 1, nombre: 'Valentina', apellido: 'Rodríguez', dni: '41234567', curso: '1°2', email: 'v.rodriguez@et35.edu.ar', emailResp: 'padre1@gmail.com', faltas: 1 },
-    { id: 2, nombre: 'Mateo', apellido: 'González', dni: '41234568', curso: '1°2', email: 'm.gonzalez@et35.edu.ar', emailResp: 'padre2@gmail.com', faltas: 2 },
-    { id: 3, nombre: 'Sofía', apellido: 'López', dni: '41234569', curso: '2°3', email: 's.lopez@et35.edu.ar', emailResp: 'padre3@gmail.com', faltas: 3 },
-    { id: 4, nombre: 'Lucas', apellido: 'Martínez', dni: '41234570', curso: '3°4 C', email: 'l.martinez@et35.edu.ar', emailResp: 'padre4@gmail.com', faltas: 0 },
-    { id: 5, nombre: 'Isabella', apellido: 'Fernández', dni: '41234571', curso: '4°2 A', email: 'i.fernandez@et35.edu.ar', emailResp: 'padre5@gmail.com', faltas: 5 },
-    { id: 6, nombre: 'Benjamín', apellido: 'García', dni: '41234572', curso: '2°3', email: 'b.garcia@et35.edu.ar', emailResp: 'padre6@gmail.com', faltas: 1 },
-    { id: 7, nombre: 'Camila', apellido: 'Torres', dni: '41234573', curso: '3°3 C', email: 'c.torres@et35.edu.ar', emailResp: 'padre7@gmail.com', faltas: 2 },
-    { id: 8, nombre: 'Santiago', apellido: 'Pérez', dni: '41234574', curso: '5°1 C', email: 's.perez@et35.edu.ar', emailResp: 'padre8@gmail.com', faltas: 4 },
-    { id: 9, nombre: 'Valeria', apellido: 'Sánchez', dni: '41234575', curso: '5°1 C', email: 'v.sanchez@et35.edu.ar', emailResp: 'padre9@gmail.com', faltas: 0 },
-    { id: 10, nombre: 'Nicolás', apellido: 'Díaz', dni: '41234576', curso: '6°2 C', email: 'n.diaz@et35.edu.ar', emailResp: 'padre10@gmail.com', faltas: 3 },
-    { id: 11, nombre: 'Antonella', apellido: 'Ruiz', dni: '41234577', curso: '6°2 C', email: 'a.ruiz@et35.edu.ar', emailResp: 'padre11@gmail.com', faltas: 1 },
-    { id: 12, nombre: 'Agustín', apellido: 'Ramírez', dni: '41234578', curso: '4°1 A', email: 'ag.ramirez@et35.edu.ar', emailResp: 'padre12@gmail.com', faltas: 0 },
-    { id: 13, nombre: 'Luciana', apellido: 'Vega', dni: '41234579', curso: '3°3 C', email: 'l.vega@et35.edu.ar', emailResp: 'padre13@gmail.com', faltas: 5 },
-    { id: 14, nombre: 'Tomás', apellido: 'Herrera', dni: '41234580', curso: '4°2 A', email: 't.herrera@et35.edu.ar', emailResp: 'padre14@gmail.com', faltas: 2 },
-    { id: 15, nombre: 'Martina', apellido: 'Castro', dni: '41234581', curso: '1°2', email: 'm.castro@et35.edu.ar', emailResp: 'padre15@gmail.com', faltas: 4 },
+    { id: 1, nombre: 'Valentina', apellido: 'Rodríguez', dni: '41234567', curso: '1°2', email: 'v.rodriguez@example.com', emailResp: 'padre1@example.com', faltas: 1 },
+    { id: 2, nombre: 'Mateo', apellido: 'González', dni: '41234568', curso: '1°2', email: 'm.gonzalez@example.com', emailResp: 'padre2@example.com', faltas: 2 },
+    { id: 3, nombre: 'Sofía', apellido: 'López', dni: '41234569', curso: '2°3', email: 's.lopez@example.com', emailResp: 'padre3@example.com', faltas: 3 },
+    { id: 4, nombre: 'Lucas', apellido: 'Martínez', dni: '41234570', curso: '3°4 C', email: 'l.martinez@example.com', emailResp: 'padre4@example.com', faltas: 0 },
+    { id: 5, nombre: 'Isabella', apellido: 'Fernández', dni: '41234571', curso: '4°2 A', email: 'i.fernandez@example.com', emailResp: 'padre5@example.com', faltas: 5 },
+    { id: 6, nombre: 'Benjamín', apellido: 'García', dni: '41234572', curso: '2°3', email: 'b.garcia@example.com', emailResp: 'padre6@example.com', faltas: 1 },
+    { id: 7, nombre: 'Camila', apellido: 'Torres', dni: '41234573', curso: '3°3 C', email: 'c.torres@example.com', emailResp: 'padre7@example.com', faltas: 2 },
+    { id: 8, nombre: 'Santiago', apellido: 'Pérez', dni: '41234574', curso: '5°1 C', email: 's.perez@example.com', emailResp: 'padre8@example.com', faltas: 4 },
+    { id: 9, nombre: 'Valeria', apellido: 'Sánchez', dni: '41234575', curso: '5°1 C', email: 'v.sanchez@example.com', emailResp: 'padre9@example.com', faltas: 0 },
+    { id: 10, nombre: 'Nicolás', apellido: 'Díaz', dni: '41234576', curso: '6°2 C', email: 'n.diaz@example.com', emailResp: 'padre10@example.com', faltas: 3 },
+    { id: 11, nombre: 'Antonella', apellido: 'Ruiz', dni: '41234577', curso: '6°2 C', email: 'a.ruiz@example.com', emailResp: 'padre11@example.com', faltas: 1 },
+    { id: 12, nombre: 'Agustín', apellido: 'Ramírez', dni: '41234578', curso: '4°1 A', email: 'ag.ramirez@example.com', emailResp: 'padre12@example.com', faltas: 0 },
+    { id: 13, nombre: 'Luciana', apellido: 'Vega', dni: '41234579', curso: '3°3 C', email: 'l.vega@example.com', emailResp: 'padre13@example.com', faltas: 5 },
+    { id: 14, nombre: 'Tomás', apellido: 'Herrera', dni: '41234580', curso: '4°2 A', email: 't.herrera@example.com', emailResp: 'padre14@example.com', faltas: 2 },
+    { id: 15, nombre: 'Martina', apellido: 'Castro', dni: '41234581', curso: '1°2', email: 'm.castro@example.com', emailResp: 'padre15@example.com', faltas: 4 },
 ];
 let ASISTENCIAS = [
     { id: 1, alumnoId: 1, fecha: '2025-06-17', entrada: '07:42', salida: '13:00', estado: 'Presente', tipo: 'QR' },
@@ -291,7 +291,7 @@ const ASUETOS_ESCOLARES_DEMO_2026 = new Map([
 let AUDITORIA = [];
 let BORRADORES = [];
 let DIAS_SIN_CLASES = {};
-const storeKey = 'et35_demo_v2';
+const storeKey = 'et35_public_demo_v1';
 const ET35_CURSO_ANTERIOR = { "3°1": "3°1 C", "3°2": "3°2 A", "3°3": "3°3 C", "3°4": "3°4 C", "3°5": "3°5 A", "3°6": "3°6 C", "3°7": "3°7 A", "3°8": "3°8 A", "3°9": "3°9 M", "4°1": "4°1 A", "4°2": "4°2 A", "4°3": "4°3 C", "4°4": "4°4 C", "4°5": "4°5 C", "4°6": "4°6 A", "4°7": "4°7 A", "5°1": "5°1 C", "5°2": "5°2 C", "5°3": "5°3 C", "5°4": "5°4 A", "5°5": "5°5 A", "6°1": "6°1 C", "6°2": "6°2 C", "6°3": "6°3 C", "6°4": "6°4 A", "6°5": "6°5 A" };
 let savedState = null;
 try {
@@ -473,7 +473,7 @@ if (window.ET35Cloud?.getStatus().active) {
     window.ET35Cloud.start();
     const indicador = document.querySelector('.live-badge span');
     if (indicador)
-        indicador.textContent = 'Nube conectada';
+        indicador.textContent = window.ET35Cloud.getStatus().ready ? 'Nube conectada' : 'Preparando base compartida…';
 }
 else {
     const indicador = document.querySelector('.live-badge span');

@@ -16,7 +16,7 @@ function abrirBaseComprobantes() {
     return new Promise((resolve, reject) => {
         if (!window.indexedDB)
             return reject(new Error('Este navegador no permite guardar comprobantes'));
-        const req = indexedDB.open('et35_comprobantes_demo', 1);
+        const req = indexedDB.open('et35_comprobantes_public_demo_v1', 1);
         req.onupgradeneeded = () => req.result.createObjectStore('archivos', { keyPath: 'id' });
         req.onsuccess = () => resolve(req.result);
         req.onerror = () => reject(req.error || new Error('No se pudo abrir la base local'));

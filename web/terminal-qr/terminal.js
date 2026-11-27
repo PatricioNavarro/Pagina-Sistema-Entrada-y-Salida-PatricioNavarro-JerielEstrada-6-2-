@@ -29,7 +29,7 @@ function feedback(status, title, detail) {
     texts.append(heading, sub);
     box.replaceChildren(symbol, texts);
 }
-const STORE_KEY = 'et35_demo_v2';
+const STORE_KEY = 'et35_public_demo_v1';
 function estadoLocal() {
     try {
         const state = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
@@ -42,14 +42,14 @@ function estadoLocal() {
 function statusConnection(ok) {
     const el = $('connection');
     el.className = 'connection ' + (ok ? 'ok' : 'off');
-    el.querySelector('span').textContent = window.ET35Cloud?.getStatus().active ? 'Conectado a base de datos compartida' : ok ? 'Modo local · Este navegador solamente' : 'Sin base: configurá la nube o abrí el sistema principal';
+    el.querySelector('span').textContent = window.ET35Cloud?.getStatus().ready ? 'Conectado a base de datos compartida' : ok ? 'Modo local · Este navegador solamente' : 'Sin base: configurá la nube o abrí el sistema principal';
 }
-function checkConnection() { statusConnection(Boolean(estadoLocal()) || Boolean(window.ET35Cloud?.getStatus().active)); }
+function checkConnection() { statusConnection(Boolean(estadoLocal()) || Boolean(window.ET35Cloud?.getStatus().ready)); }
 (async () => {
     if (window.ET35Cloud) {
         await window.ET35Cloud.bootstrap();
-        if (!window.ET35Cloud.getStatus().active) {
-            feedback('error', 'Base de datos sin conectar', 'Para escanear desde otro dispositivo, abrí ../conexion.html y conectá Supabase.');
+        if (!window.ET35Cloud.getStatus().ready) {
+            feedback('error', 'Base compartida no disponible', 'Abrí primero el sistema principal o revisá la conexión a internet y la instalación SQL.');
         }
     }
     checkConnection();

@@ -5,7 +5,9 @@ function setTab(t) {
     document.getElementById('login-pass').value = t === 'jefa' ? 'admin123' : t === 'alumno' ? 'alumno123' : '123456';
 }
 
-function doLogin() {
+async function doLogin() {
+    if (window.ET35Cloud?.getStatus().active && !window.ET35Cloud.getStatus().ready)
+        await window.ET35Cloud.start();
     const u = document.getElementById('login-user').value.trim();
     const p = document.getElementById('login-pass').value.trim();
     if (!u || !p) {
